@@ -18,7 +18,7 @@ services:
       - PUID=1000
       - PGID=150
       - TZ=Europe/Berlin
-    image: linuxserver/sonarr
+    build: sonarr/
   
   jellyfin:
     restart: unless-stopped
