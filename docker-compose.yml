@@ -8,6 +8,12 @@ services:
       - PUID=1000
       - PGID=150
       - TZ=Europe/Berlin
+    volumes:
+      - type: volume
+        source: nfs-media
+        target: /srv/media
+        volume: 
+          nocopy: true
     privileged: true
     build: radarr/
 
@@ -19,6 +25,12 @@ services:
       - PUID=1000
       - PGID=150
       - TZ=Europe/Berlin
+    volumes:
+      - type: volume
+        source: nfs-media
+        target: /srv/media
+        volume: 
+          nocopy: true
     privileged: true
     build: sonarr/
   
@@ -31,4 +43,10 @@ services:
       - PGID=150
       - TZ=Europe/Berlin
     image: linuxserver/jellyfin
-  
+ 
+volumes:
+  nfs-media:
+    driver_opts:
+      type: "nfs"
+      o: "addr=10.0.0.114,nolock,soft,rw,no_subtree_check"
+      device: ":/srv/smbdata/media"
