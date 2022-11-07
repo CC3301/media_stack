@@ -8,7 +8,8 @@ services:
       - PUID=1000
       - PGID=150
       - TZ=Europe/Berlin
-    image: linuxserver/radarr
+    privileged: true
+    build: radarr/
 
   sonarr:
     restart: unless-stopped
@@ -18,6 +19,7 @@ services:
       - PUID=1000
       - PGID=150
       - TZ=Europe/Berlin
+    privileged: true
     build: sonarr/
   
   jellyfin:
