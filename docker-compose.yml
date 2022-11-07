@@ -14,8 +14,14 @@ services:
         target: /srv/media
         volume: 
           nocopy: true
+    volumes:
+      - type: volume
+        source: nfs-radarr-cfg
+        target: /config
+        volume:
+          nocopy: true
     privileged: true
-    build: radarr/
+    image: linuxserver/radarr
 
   sonarr:
     restart: unless-stopped
@@ -31,8 +37,14 @@ services:
         target: /srv/media
         volume: 
           nocopy: true
+    volumes:
+      - type: volume
+        source: nfs-sonarr-cfg
+        target: /config
+        volume:
+          nocopy: true
     privileged: true
-    build: sonarr/
+    image: linuxserver/sonarr
   
   jellyfin:
     restart: unless-stopped
@@ -42,11 +54,49 @@ services:
       - PUID=1000
       - PGID=150
       - TZ=Europe/Berlin
+    volumes:
+      - type: volume
+        source: nfs-media
+        target: /srv/media
+        volume: 
+          nocopy: true
     image: linuxserver/jellyfin
+
+
+  prowlarr:
+    restart: unless-stopped
+    ports:
+      - 9696:9696
+    environment:
+      - PUID=1000
+      - PGID=150
+      - TZ=Europe/Berlin
+    volumes:
+      - type: volume
+        source: nfs-prowlarr-cfg
+        target: /config
+        volume:
+          nocopy: true
+    image: linuxserver/prowlarr:develop
  
 volumes:
   nfs-media:
     driver_opts:
       type: "nfs"
-      o: "addr=10.0.0.114,nolock,soft,rw,no_subtree_check"
+      o: "addr=10.0.0.114,nolock,soft,rw"
       device: ":/srv/smbdata/media"
+  nfs-radarr-cfg:
+    driver_opts:
+      type: "nfs"
+      o: "addr=10.0.0.114,nolock,soft,rw"
+      device: ":/srv/smbdata/media/config/radarr"
+  nfs-sonarr-cfg:
+    driver_opts:
+      type: "nfs"
+      o: "addr=10.0.0.114,nolock,soft,rw"
+      device: ":/srv/smbdata/media/config/sonarr"
+  nfs-prowlarr-cfg:
+    driver_opts:
+      type: "nfs"
+      o: "addr=10.0.0.114,nolock,soft,rw"
+      device: ":/srv/smbdata/media/config/prowlarr"
