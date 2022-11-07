@@ -1,0 +1,32 @@
+version: '3'
+services:
+  radarr:
+    restart: unless-stopped
+    ports: 
+      - 7878:7878
+    environment:
+      - PUID=1000
+      - PGID=150
+      - TZ=Europe/Berlin
+    image: linuxserver/radarr
+
+  sonarr:
+    restart: unless-stopped
+    ports:
+      - 8989:8989
+    environment:
+      - PUID=1000
+      - PGID=150
+      - TZ=Europe/Berlin
+    image: linuxserver/sonarr
+  
+  jellyfin:
+    restart: unless-stopped
+    ports:
+      - 8096:8096
+    environment:
+      - PUID=1000
+      - PGID=150
+      - TZ=Europe/Berlin
+    image: linuxserver/jellyfin
+  
